@@ -1,34 +1,44 @@
+// src/Components/RoomCard.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUserFriends, FaArrowRight } from 'react-icons/fa';
 
 const RoomCard = ({ room, showJoinButton = false, onJoin }) => {
   const navigate = useNavigate();
-  
+ 
+  const handleClick = () => {
+    if (!showJoinButton) {
+      navigate(`/room/${room._id}`);
+    }
+  };
+ 
+  const handleJoin = (e) => {
+    e.stopPropagation();
+    if (onJoin) {
+      onJoin(room._id);
+    }
+  };
+ 
   return (
-    <div 
+    <div
       className="room-card"
-      onClick={!showJoinButton ? () => navigate(`/room/${room._id}`) : null}
+      onClick={handleClick}
+      style={{ cursor: showJoinButton ? 'default' : 'pointer' }}
     >
       <div className="room-content">
         <h3 className="room-name">{room.name}</h3>
         <div className="room-meta">
           <span className="member-count">
-            <FaUserFriends className="member-icon" />
+            <span className="member-icon">👥</span>
             {room.members?.length || 0} members
           </span>
         </div>
       </div>
-
       {showJoinButton && (
-        <button 
+        <button
           className="join-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onJoin && onJoin(room._id);
-          }}
+          onClick={handleJoin}
         >
-          Join <FaArrowRight className="arrow-icon" />
+          Join <span className="arrow-icon">→</span>
         </button>
       )}
     </div>

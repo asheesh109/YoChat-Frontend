@@ -1,5 +1,21 @@
+/* src/Utils/Global.css - Fixed loader centering, hamburger no overlap, text visibility on cream bg */
 :root {
-  --navbar-height: 80px; /* Fixed navbar height */
+  --navbar-height: 0px;
+  --sidebar-width: 300px;
+  --bg-primary: #000000;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1e1e1e;
+  --bg-chat: #000000;
+  --bg-chat-bg: #efeae2; /* Cream bg */
+  --accent-primary: #25D366; /* WhatsApp green */
+  --accent-hover: #128C7E;
+  --text-primary: #000000; /* Dark for light bgs */
+  --text-secondary: #636363;
+  --text-muted: #8e8e93;
+  --success: #25D366;
+  --error: #ff6b6b;
+  --border: rgba(0, 0, 0, 0.1); /* Dark border for cream */
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 * {
@@ -12,672 +28,579 @@ html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: 100vh;
+  overflow: hidden; /* For app only */
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
-.home-container {
-  min-height: 100vh;
-  height: auto;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 40px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+/* App Container - WhatsApp desktop layout */
+.app-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Loading Container */
-.loading-container {
+/* Loading and Error - Full center, WhatsApp style */
+.loading-container, .error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
-  gap: 16px;
   width: 100%;
-}
-
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #e5e7eb;
-  border-top: 4px solid #667eea;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.loading-container p {
-  color: #6b7280;
-  font-size: 18px;
-}
-
-/* Header Section */
-.home-header {
+  height: 100vh;
   text-align: center;
-  margin: 0 0 40px 0;
-  width: 100%;
-  max-width: 1400px;
-  padding: 20px;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 10;
-}
-
-.welcome-message {
-  font-size: 28px;
-  color: #2d3748;
-  margin-bottom: 16px;
-  font-weight: 700;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
-  position: relative;
-  display: inline-block;
-  padding: 0 20px;
-}
-
-.welcome-message::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  border-radius: 3px;
-}
-
-.home-title {
-  font-size: 56px;
-  font-weight: 900;
-  color: #1a202c;
-  margin: 0 0 16px 0;
-  letter-spacing: -1.5px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  line-height: 1.2;
-}
-
-.home-subtitle {
-  color: #4a5568;
-  font-size: 20px;
-  margin: 0;
-  font-weight: 500;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.5;
-}
-
-/* Create Room Section */
-.create-room-section {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto 40px auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
-.create-room-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.section-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: #1a202c;
-  margin: 0 0 24px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  padding: 8px 0;
-}
-
-.room-icon {
-  font-size: 20px;
-}
-
-.room-count {
-  background: #667eea;
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-left: auto;
-}
-
-.create-room-form {
-  display: flex;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   gap: 16px;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.room-name-input {
-  flex: 1;
-  padding: 16px 20px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
+.loading-icon, .error-icon {
+  font-size: 64px;
+  margin: 0;
+}
+
+.loading-text, .error-text {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.retry-button {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.2s ease;
-  background: #ffffff;
-  color: #1f2937;
-  outline: none;
-  min-width: 0;
-  box-sizing: border-box;
 }
 
-.room-name-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.retry-button:hover {
+  background: var(--accent-hover);
   transform: translateY(-1px);
 }
 
-.room-name-input::placeholder {
-  color: #9ca3af;
+/* Sidebar - WhatsApp left panel, dark theme */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
-.create-room-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 16px 24px;
+.sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.user-profile {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-tertiary);
   border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-width: 140px;
-  white-space: nowrap;
-  box-sizing: border-box;
-}
-
-.create-room-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-.create-room-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.plus-icon {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.button-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* Rooms Section */
-.rooms-section {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto 40px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
-.my-rooms, .all-rooms {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.rooms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  width: 100%;
-  min-height: 0;
-}
-
-/* Modern Room Card Design */
-.room-card {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  position: relative;
-}
-
-.room-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-.room-card-header {
-  padding: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  background: linear-gradient(135deg, #f6f9fc 0%, #eef2f5 100%);
-}
-
-.room-name {
-  font-size: 20px;
+  color: white;
   font-weight: 700;
-  color: #2d3748;
-  margin: 0;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.user-name {
+  color: white; /* Light for dark bg */
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--error);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: opacity 0.2s ease;
+  text-decoration: underline;
+}
+
+.logout-btn:hover {
+  opacity: 0.8;
+}
+
+/* Sidebar Content */
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 8px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.room-icon-small {
-  font-size: 16px;
-  color: #667eea;
+.create-room-btn {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.room-card-body {
-  padding: 20px;
+.create-room-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  transform: scale(1.05);
+}
+
+.rooms-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.room-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #4a5568;
-  font-size: 14px;
-}
-
-.room-meta-item {
-  display: flex;
-  align-items: center;
   gap: 4px;
 }
 
-.room-created-by {
-  font-size: 14px;
-  color: #718096;
-  margin-top: 8px;
-}
-
-.room-created-by strong {
-  color: #4a5568;
-  font-weight: 600;
-}
-
-.room-card-footer {
-  padding: 16px 20px;
-  background: rgba(247, 250, 252, 0.8);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.room-members-count {
+.room-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: #718096;
-}
-
-.room-active-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #48bb78;
-  margin-right: 6px;
-}
-
-.room-card-wrapper {
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   position: relative;
+  border-radius: 8px;
 }
 
-.join-room-button {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+.room-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.room-item.active {
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--accent-primary);
+  padding-left: 13px;
+}
+
+.room-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.room-item.active .room-icon {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.room-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.room-name {
+  color: white; /* Light for dark sidebar */
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.room-members {
+  color: var(--text-muted); /* Light muted for dark */
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.join-btn {
+  background: var(--accent-primary);
   color: white;
   border: none;
-  padding: 10px 18px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.join-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.empty-rooms {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+}
+
+.empty-rooms p {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Main Content - WhatsApp right panel */
+.main-content {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Welcome Screen - Dark text on cream bg like WhatsApp */
+.welcome-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: var(--bg-chat-bg);
+}
+
+.welcome-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.welcome-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+  opacity: 0.8;
+}
+
+.welcome-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary); /* Dark */
+  margin: 0 0 12px 0;
+}
+
+.welcome-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary); /* Dark secondary */
+  margin: 0 0 24px 0;
+}
+
+.welcome-create-btn {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.welcome-create-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: white; /* Light for dark modal */
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--bg-tertiary);
+  color: white;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-input {
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.modal-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+}
+
+.modal-input::placeholder {
+  color: var(--text-muted);
+}
+
+.modal-footer {
+  padding: 16px 20px 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  padding: 12px 20px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  box-sizing: border-box;
-  margin-top: 12px;
-  width: 100%;
+  transition: all 0.2s ease;
+  border: none;
 }
 
-.join-room-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+.modal-btn.cancel {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
 
-.join-icon {
-  font-size: 16px;
-  font-weight: bold;
-  transition: transform 0.2s ease;
+.modal-btn.cancel:hover {
+  background: var(--bg-tertiary);
 }
 
-.join-room-button:hover .join-icon {
-  transform: translateX(4px);
+.modal-btn.create {
+  background: var(--accent-primary);
+  color: white;
 }
 
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: #6b7280;
-  width: 100%;
-  box-sizing: border-box;
+.modal-btn.create:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
 }
 
-.empty-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  opacity: 0.5;
+.modal-btn.create:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.empty-state p {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 8px 0;
-  color: #374151;
+.button-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
-.empty-state small {
-  font-size: 16px;
-  opacity: 0.8;
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
-@media (min-width: 1200px) {
-  .home-header, .create-room-section, .rooms-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .home-header, .create-room-section, .rooms-section {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
-}
-
-@media (max-width: 992px) {
-  .home-title {
-    font-size: 40px;
-  }
-  
-  .welcome-message {
-    font-size: 22px;
-  }
-  
-  .rooms-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-  
-  .section-title {
-    font-size: 26px;
-  }
-}
-
+/* Mobile - WhatsApp mobile layout: Hide sidebar, add hamburger */
 @media (max-width: 768px) {
-  :root {
-    --navbar-height: 70px; /* Adjusted for mobile navbar */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
   }
 
-  .home-container {
-  
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 30px;
+  .sidebar.open {
+    transform: translateX(0);
   }
-  
-  .home-header {
-    padding: 16px 20px;
-    margin-bottom: 32px;
-  }
-  
-  .home-header, .create-room-section, .rooms-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-  
-  .home-title {
-    font-size: 36px;
-  }
-  
-  .welcome-message {
-    font-size: 20px;
-  }
-  
-  .home-subtitle {
-    font-size: 18px;
-  }
-  
-  .create-room-form {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  
-  .create-room-button {
+
+  .main-content {
     width: 100%;
+    padding-left: 0; /* Reset, hamburger is fixed */
   }
-  
-  .rooms-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .create-room-card,
-  .my-rooms,
-  .all-rooms {
-    padding: 24px;
-  }
-  
-  .section-title {
+
+  /* Hamburger - Fixed, no overlap */
+  .hamburger {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--text-primary);
     font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    left: auto;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.5);
+    padding-bottom: 20px;
   }
-}
 
-@media (max-width: 576px) {
-  :root {
-    --navbar-height: 65px;
-  }
-
-  .home-container {
-    padding-top: calc(var(--navbar-height) + 20px);
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-  
-  .home-title {
-    font-size: 32px;
-  }
-  
-  .welcome-message {
-    font-size: 18px;
-  }
-  
-  .home-subtitle {
-    font-size: 16px;
-  }
-  
-  .create-room-card,
-  .my-rooms,
-  .all-rooms {
-    padding: 20px;
-  }
-  
-  .room-name-input,
-  .create-room-button {
-    padding: 14px 16px;
-  }
-  
-  .section-title {
-    font-size: 22px;
-    flex-wrap: wrap;
-  }
-  
-  .room-count {
-    margin-left: 0;
-    width: 100%;
-    text-align: center;
-    margin-top: 8px;
-  }
-  
-  .room-card {
-    border-radius: 12px;
-  }
-  
-  .room-card-header,
-  .room-card-body,
-  .room-card-footer {
-    padding: 16px;
+  .hamburger:hover {
+    background: var(--bg-tertiary);
   }
 }
 
 @media (max-width: 480px) {
   :root {
-    --navbar-height: 60px;
+    --sidebar-width: 80%;
   }
 
-  .home-container {
-   
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 20px;
-  }
-  
-  .home-header, .create-room-section, .rooms-section {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  
-  .home-title {
-    font-size: 28px;
-  }
-  
-  .welcome-message {
-    font-size: 16px;
-  }
-  
-  .home-subtitle {
-    font-size: 14px;
-  }
-  
-  .create-room-form {
-    gap: 10px;
-  }
-  
-  .section-title {
-    font-size: 20px;
-  }
-  
-  .empty-icon {
-    font-size: 48px;
-  }
-  
-  .empty-state p {
-    font-size: 16px;
-  }
-  
-  .empty-state small {
-    font-size: 14px;
-  }
-  
-  .room-name {
-    font-size: 18px;
-  }
-  
-  .room-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  
-  .create-room-card,
-  .my-rooms,
-  .all-rooms {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 360px) {
-  :root {
-    --navbar-height: 55px;
-  }
-
-  .home-container {
-   
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  
-  .home-title {
+  .welcome-title {
     font-size: 24px;
   }
-  
-  .welcome-message {
-    font-size: 14px;
-  }
-  
-  .section-title {
-    font-size: 18px;
-  }
-  
-  .create-room-card,
-  .my-rooms,
-  .all-rooms {
-    padding: 12px;
+
+  .modal-content {
+    width: 95%;
+    margin: 16px;
   }
 }

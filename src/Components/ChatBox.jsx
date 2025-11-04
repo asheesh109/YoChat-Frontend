@@ -1,23 +1,21 @@
+// src/Components/ChatBox.js - Minor updates for text visibility on light bg
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import socket from "../Utils/Socket";
 import axiosInstance from "../Utils/axiosInstance";
 import './ChatBox.css';
 
-const ChatBox = ({ roomId }) => {
+const ChatBox = ({ roomId, roomName: propRoomName }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [roomName, setRoomName] = useState("");
+  const [roomName, setRoomName] = useState(propRoomName || "");
   const [isLoading, setIsLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const usernameRef = useRef("Anonymous");
   const isMountedRef = useRef(false);
   const chatBoxRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     isMountedRef.current = true;
-
     const fetchUserInfo = async () => {
       try {
         const response = await axiosInstance.get("/users/me");
@@ -29,6 +27,10 @@ const ChatBox = ({ roomId }) => {
     };
 
     const fetchRoomName = async (roomId) => {
+      if (propRoomName) {
+        setRoomName(propRoomName);
+        return;
+      }
       try {
         const response = await axiosInstance.get(`/rooms/${roomId}`);
         setRoomName(response.data.name || "Unnamed Room");
@@ -40,7 +42,6 @@ const ChatBox = ({ roomId }) => {
 
     const handleIncomingMessage = (payload) => {
       if (!isMountedRef.current) return;
-
       setMessages(prev => {
         const exists = prev.some(m =>
           (m._id && payload._id && m._id === payload._id) ||
@@ -59,7 +60,6 @@ const ChatBox = ({ roomId }) => {
 
     const handleMessageDelivered = (confirmedMessage) => {
       if (!isMountedRef.current) return;
-
       setMessages(prev => prev.map(msg =>
         (msg.tempId === confirmedMessage.tempId && msg.username === usernameRef.current)
           ? { ...confirmedMessage, isPending: false }
@@ -69,17 +69,13 @@ const ChatBox = ({ roomId }) => {
 
     const initializeSocket = async () => {
       await fetchUserInfo();
-
-      // 🟢 Set up listeners BEFORE joining room
       socket.on("receive-message", handleIncomingMessage);
       socket.on("room-history", handleRoomHistory);
       socket.on("message-delivered", handleMessageDelivered);
-
       if (roomId) {
         socket.emit("join-room", { roomId, username: usernameRef.current });
         await fetchRoomName(roomId);
       }
-
       setIsLoading(false);
     };
 
@@ -91,7 +87,7 @@ const ChatBox = ({ roomId }) => {
       socket.off("room-history", handleRoomHistory);
       socket.off("message-delivered", handleMessageDelivered);
     };
-  }, [roomId]);
+  }, [roomId, propRoomName]);
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -101,7 +97,6 @@ const ChatBox = ({ roomId }) => {
 
   const handleSend = () => {
     if (!message.trim()) return;
-
     const tempId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const messageData = {
       roomId,
@@ -110,7 +105,6 @@ const ChatBox = ({ roomId }) => {
       time: new Date().toISOString(),
       tempId
     };
-
     setMessages(prev => [...prev, { ...messageData, isPending: true }]);
     socket.emit("send-message", messageData);
     setMessage("");
@@ -158,23 +152,20 @@ const ChatBox = ({ roomId }) => {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <button onClick={() => navigate("/home")} className="back-button">
-          <span className="back-icon">←</span>
-          Back
-        </button>
-        <h2 className="room-title">{roomName}</h2>
-        <div className="online-indicator">
-          <span className="online-dot"></span>
-          Online
+        <div className="chat-header-content">
+          <div className="channel-info">
+            <span className="channel-icon">#</span>
+            <h2 className="channel-name">{roomName}</h2>
+          </div>
+          
         </div>
       </div>
-
       <div ref={chatBoxRef} className="chat-messages">
         {messages.length === 0 ? (
           <div className="empty-chat">
             <div className="empty-chat-icon">💬</div>
-            <p>No messages yet</p>
-            <small>Start the conversation!</small>
+            <h3 className="empty-title">Welcome to #{roomName}</h3>
+            <p className="empty-description">This is the beginning of your conversation</p>
           </div>
         ) : (
           messages.map((msg) => (
@@ -189,15 +180,16 @@ const ChatBox = ({ roomId }) => {
               )}
               <div className="message-content">
                 {!isCurrentUser(msg.username) && (
-                  <div className="message-username">{msg.username}</div>
+                  <div className="message-header">
+                    <span className="message-username">{msg.username}</span>
+                    <span className="message-time">{formatTime(msg.time)}</span>
+                  </div>
                 )}
                 <div className="message-bubble">
                   <span className="message-text">{msg.message}</span>
-                  <div className="message-meta">
-                    <span className="message-time">
-                      {formatTime(msg.time)}
-                    </span>
-                    {isCurrentUser(msg.username) && (
+                  {isCurrentUser(msg.username) && (
+                    <div className="message-meta">
+                      <span className="message-time">{formatTime(msg.time)}</span>
                       <span className="message-status">
                         {msg.isPending ? (
                           <span className="status-sending">⏳</span>
@@ -205,20 +197,19 @@ const ChatBox = ({ roomId }) => {
                           <span className="status-sent">✓</span>
                         )}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           ))
         )}
       </div>
-
       <div className="chat-input-container">
         <div className="chat-input-wrapper">
           <textarea
             value={message}
-            placeholder="Type your message..."
+            placeholder={`Message #${roomName}`}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             className="message-input"

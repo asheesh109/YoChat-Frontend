@@ -1,16 +1,10 @@
+// src/Room.js (unchanged)
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import ChatBox from '../Components/ChatBox';
+import Home from './Home';
 
 const Room = () => {
-  const { roomId } = useParams();
-
-  return (
-    <div>
-      <h2>Room Chat</h2>
-      <ChatBox roomId={roomId} />
-    </div>
-  );
+  return <Home />;
 };
 
 export default Room;

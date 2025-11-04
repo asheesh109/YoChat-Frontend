@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/Register.js - Updated with useEffect to add body class for scrolling override
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import './Register.css';
@@ -14,8 +15,17 @@ const Register = () => {
   const [error, setError] = useState('');
   const [showRegisterForm, setShowRegisterForm] = useState(false);
 
+  // Add class to body for scrolling override
+  useEffect(() => {
+    document.body.classList.add('register-page');
+    return () => {
+      document.body.classList.remove('register-page');
+    };
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError('');
   };
 
   const validateForm = () => {
@@ -46,54 +56,55 @@ const Register = () => {
     return true;
   };
 
-const handleRegister = async (e) => {
-  e.preventDefault();
-  setError('');
-  
-  if (!validateForm()) return;
-  
-  setLoading(true);
-  
-  try {
-    const res = await axios.post(
-      "https://yochat-backend-1.onrender.com/api/auth/register",
-      formData,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 10000
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError('');
+   
+    if (!validateForm()) return;
+   
+    setLoading(true);
+   
+    try {
+      const res = await axios.post(
+        "https://yochat-backend-1.onrender.com/api/auth/register",
+        formData,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 10000
+        }
+      );
+     
+      console.log("Registration response:", res.data);
+     
+      if (res.data.token && res.data.user) {
+        setError('Account created! Redirecting to login...');
+        setTimeout(() => {
+          navigate("/login", {
+            state: {
+              registrationSuccess: true,
+              message: "Registration successful! Please log in.",
+              email: formData.email
+            }
+          });
+        }, 1500);
+      } else {
+        setError(res.data.message || 'Registration completed but unexpected response');
       }
-    );
-    
-    console.log("Registration response:", res.data);
-    
-    if (res.data.token && res.data.user) {
-      navigate("/login", { 
-        state: { 
-          registrationSuccess: true,
-          message: "Registration successful! Please log in.",
-          email: formData.email
-        } 
-      });
-    } else {
-      setError(res.data.message || 'Registration completed but unexpected response');
+    } catch (error) {
+      console.error("Registration error:", error);
+      if (error.response) {
+        setError(error.response.data?.error ||
+                error.response.data?.message ||
+                'Registration failed. Please try again.');
+      } else if (error.request) {
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Registration error:", error);
-    if (error.response) {
-      setError(error.response.data?.error || 
-              error.response.data?.message || 
-              'Registration failed. Please try again.');
-    } else if (error.request) {
-      setError('Network error. Please check your connection and try again.');
-    } else {
-      setError('An unexpected error occurred. Please try again later.');
-    }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleGetStarted = () => {
     setShowRegisterForm(true);
@@ -104,196 +115,193 @@ const handleRegister = async (e) => {
       {/* Navigation */}
       <nav className="navigation">
         <div className="nav-content">
-          <div className="logo">
+          <div className="logo" aria-label="YoChat Logo">
             <div className="logo-icon">
-              <span className="logo-text">Yo</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" fill="white" opacity="0.9"/>
+                <circle cx="12" cy="12" r="3" fill="white"/>
+              </svg>
             </div>
-            <span className="logo-name">YoChat</span>
+            <span className="logo-name " style={{ color: 'white' }}>YoChat</span>
           </div>
-          <Link to="/login" className="nav-login-btn">Sign In</Link>
+          <Link to="/login" className="nav-login-btn" style={{ color: 'white' }}>Login</Link>
         </div>
       </nav>
-
       {/* Hero Section */}
-      <div className="hero-section">
+      <section className="hero-section">
         <div className="hero-content">
           <div className="hero-text">
-            <h1 className="hero-title">
-              Connect, Chat, and Create
-              <span className="highlight"> Amazing Conversations</span>
+            <div className="badge" role="img" aria-label="Beta Badge" style={{ color: 'white' }}>✨ Now in Beta</div>
+            <h1 className="hero-title" style={{ color: 'white' }}>
+              Where conversations
+              <span className="gradient-text"> come alive</span>
             </h1>
-            <p className="hero-subtitle">
-              Join thousands of users in YoChat - where you can create your own chat rooms, 
-              join exciting conversations, and build meaningful connections with people worldwide.
+            <p className="hero-subtitle" style={{ color: 'white' }}>
+              Join the next generation of chat. 🚀
             </p>
-            <div className="hero-features">
-              <div className="feature-item">
-                <div className="feature-icon">🏠</div>
-                <span>Create Custom Rooms</span>
+           
+            <div className="hero-stats">
+              <div className="stat-item">
+                <div className="stat-number" style={{ color: 'white' }}>10K+</div>
+                <div className="stat-label" style={{ color: 'white' }}>Active Users</div>
               </div>
-              <div className="feature-item">
-                <div className="feature-icon">💬</div>
-                <span>Real-time Messaging</span>
+              <div className="stat-divider"></div>
+              <div className="stat-item">
+                <div className="stat-number" style={{ color: 'white' }}>500+</div>
+                <div className="stat-label" style={{ color: 'white' }}>Live Rooms</div>
               </div>
-              <div className="feature-item">
-                <div className="feature-icon">🌐</div>
-                <span>Global Community</span>
+              <div className="stat-divider"></div>
+              <div className="stat-item">
+                <div className="stat-number" style={{ color: 'white' }}>24/7</div>
+                <div className="stat-label" style={{ color: 'white' }}>Community</div>
               </div>
             </div>
-            <button 
+            <button
               className="hero-cta-btn"
               onClick={handleGetStarted}
               disabled={loading}
+              aria-label="Get Started with YoChat"
             >
-              Get Started Free
-              <span className="btn-arrow">→</span>
+              <span style={{ color: 'white' }}>Get Started</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
-            <p className="hero-login-text">
-              Already have an account? <Link to="/login" className="login-link">Sign in here</Link>
+           
+            <p className="hero-footer-text" style={{ color: 'white' }}>
+              Already have an account? <Link to="/login" className="text-link" style={{ color: 'white' }}>Sign in</Link>
             </p>
           </div>
           <div className="hero-visual">
-            <div className="chat-mockup">
-              <div className="chat-header">
-                <div className="chat-dots">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <span className="chat-title">General Room</span>
-              </div>
-              <div className="chat-messages">
-                <div className="message left">
-                  <div className="message-avatar">A</div>
-                  <div className="message-content">Hey everyone! 👋</div>
-                </div>
-                <div className="message right">
-                  <div className="message-content">Welcome to YoChat!</div>
-                  <div className="message-avatar">B</div>
-                </div>
-                <div className="message left">
-                  <div className="message-avatar">C</div>
-                  <div className="message-content">This is amazing! 🚀</div>
-                </div>
+            <div className="floating-card card-1">
+              <div className="card-icon">💬</div>
+              <div className="card-text">
+                <div className="card-title" style={{ color: 'white' }}>Real-time Chat</div>
+                <div className="card-desc" style={{ color: 'white' }}>Instant messaging</div>
               </div>
             </div>
+            <div className="floating-card card-2">
+              <div className="card-icon">🎮</div>
+              <div className="card-text">
+                <div className="card-title" style={{ color: 'white' }}>Custom Rooms</div>
+                <div className="card-desc" style={{ color: 'white' }}>Your space, your rules</div>
+              </div>
+            </div>
+            <div className="floating-card card-3">
+              <div className="card-icon">🌍</div>
+              <div className="card-text">
+                <div className="card-title" style={{ color: 'white' }}>Global Community</div>
+                <div className="card-desc" style={{ color: 'white' }}>Connect worldwide</div>
+              </div>
+            </div>
+            <div className="center-glow"></div>
           </div>
         </div>
-      </div>
-
-      {/* Register Form Dropdown */}
-      <div className={`register-dropdown ${showRegisterForm ? 'active' : ''}`}>
-        <div className="register-card">
-          <div className="register-header">
-            <h2 className="register-title">Create Your Account</h2>
-            <p className="register-subtitle">Join the YoChat community today</p>
-            <button 
-              className="close-btn"
+       
+      </section>
+     
+      {/* Register Modal */}
+      {showRegisterForm && (
+        <>
+          <div className="modal-overlay" onClick={() => !loading && setShowRegisterForm(false)}></div>
+          <div className="register-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button
+              className="modal-close"
               onClick={() => setShowRegisterForm(false)}
               disabled={loading}
+              aria-label="Close modal"
+              style={{ color: 'white' }}
             >
-              ×
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
             </button>
-          </div>
-
-          <form className="register-form" onSubmit={handleRegister}>
-            <div className="input-group">
-              <label htmlFor="username" className="input-label">Username</label>
-              <input
-                id="username"
-                className="input-field"
-                type="text"
-                name="username"
-                placeholder="Choose a unique username (3-20 chars)"
-                value={formData.username}
-                onChange={handleChange}
-                required
-                minLength="3"
-                maxLength="20"
-                disabled={loading}
-              />
+            <div className="modal-header">
+              <h2 id="modal-title" style={{ color: 'white' }}>Create Account</h2>
+              <p style={{ color: 'white' }}>Join thousands of users on YoChat</p>
             </div>
-
-            <div className="input-group">
-              <label htmlFor="email" className="input-label">Email</label>
-              <input
-                id="email"
-                className="input-field"
-                type="email"
-                name="email"
-                placeholder="Enter your email address"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              />
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="password" className="input-label">Password</label>
-              <input
-                id="password"
-                className="input-field"
-                type="password"
-                name="password"
-                placeholder="Create a secure password (min 6 characters)"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                minLength="6"
-                disabled={loading}
-              />
-            </div>
-
-            {error && (
-              <div className="error-message">
-                <div className="error-title">Registration Error</div>
-                <div className="error-details">
-                  {error.split('\n').map((line, i) => (
-                    <div key={i}>{line}</div>
-                  ))}
-                </div>
-                {error.includes('Network error') && (
-                  <div className="error-tip">
-                    <small>Try these troubleshooting steps:</small>
-                    <ol>
-                      <li>Ensure backend server is running (check terminal)</li>
-                      <li>Verify the backend URL is correct</li>
-                      <li>Check browser's Network tab for details</li>
-                    </ol>
-                  </div>
-                )}
+            <form className="register-form" onSubmit={handleRegister}>
+              <div className="form-group">
+                <label htmlFor="username" style={{ color: 'white' }}>Username</label>
+                <input
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="cooluser123"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                  minLength="3"
+                  maxLength="20"
+                  disabled={loading}
+                  autoComplete="username"
+                  aria-describedby="username-hint"
+                  style={{ color: 'white' }}
+                />
+                <span id="username-hint" className="input-hint" style={{ color: 'white' }}>3-20 characters, letters, numbers, underscores</span>
               </div>
-            )}
-
-            <button 
-              type="submit" 
-              disabled={loading} 
-              className={`register-button ${loading ? 'loading' : ''}`}
-            >
-              {loading ? (
-                <>
-                  <div className="spinner"></div>
-                  Creating Account...
-                </>
-              ) : (
-                'Create Account'
+              <div className="form-group">
+                <label htmlFor="email" style={{ color: 'white' }}>Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  autoComplete="email"
+                  style={{ color: 'white' }}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password" style={{ color: 'white' }}>Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  minLength="6"
+                  disabled={loading}
+                  autoComplete="new-password"
+                  style={{ color: 'white' }}
+                />
+                <span className="input-hint" style={{ color: 'white' }}>Minimum 6 characters</span>
+              </div>
+              {error && (
+                <div className="error-alert" role="alert" aria-live="assertive" style={{ color: 'white' }}>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M10 6V10M10 14H10.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <span>{error}</span>
+                </div>
               )}
-            </button>
-          </form>
-
-          <div className="register-footer">
-            <p>Already have an account? <Link to="/login" className="login-link">Sign in</Link></p>
+              <button
+                type="submit"
+                className="submit-btn"
+                disabled={loading}
+                aria-label={loading ? "Creating account" : "Continue to register"}
+              >
+                {loading ? (
+                  <>
+                    <div className="spinner"></div>
+                    <span style={{ color: 'white' }}>Creating account...</span>
+                  </>
+                ) : (
+                  <span style={{ color: 'white' }}>Continue</span>
+                )}
+              </button>
+            </form>
+            <div className="modal-footer">
+              <Link to="/login" className="footer-link" onClick={() => setShowRegisterForm(false)} style={{ color: 'white' }}>Already have an account? Sign in</Link>
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* Background Overlay */}
-      {showRegisterForm && (
-        <div 
-          className="overlay"
-          onClick={() => !loading && setShowRegisterForm(false)}
-        ></div>
+        </>
       )}
     </div>
   );
