@@ -1,12 +1,22 @@
-/* src/Components/ChatBox.css - Fixed text visibility on cream bg (dark text) */
+/* src/Components/ChatBox.css - Updated for mobile viewport height fix */
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100); /* Use dynamic vh for mobile address bar */
   width: 100%;
   background: var(--bg-chat, #000000); /* Dark mode like WhatsApp */
   position: relative;
   font-family: 'Helvetica Neue', sans-serif;
+  margin: 0; /* Ensure no outer margins */
+  padding: 0; /* Ensure no outer padding */
+  overflow: hidden; /* Prevent any overflow */
+}
+
+/* Ensure body and html take full height - add this to your global CSS if not already */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Loading State */
@@ -120,6 +130,8 @@
   background: var(--bg-chat-bg, #efeae2); /* Light bg */
   scroll-behavior: smooth;
   color: var(--text-primary); /* Ensure dark text */
+  /* Ensure it takes full available height */
+  min-height: 0;
 }
 
 .chat-messages::-webkit-scrollbar {
@@ -306,6 +318,7 @@
   flex-shrink: 0;
   position: sticky;
   bottom: 0;
+  z-index: 10; /* Ensure it stays above messages */
 }
 
 .chat-input-wrapper {
@@ -332,7 +345,6 @@
   border: none;
   background: transparent;
   font-size: 15px;
-  color: var(--text-primary); /* Dark */
   outline: none;
   resize: none;
   line-height: 1.4;
@@ -424,5 +436,9 @@
 
   .chat-input-container {
     padding: 8px 16px;
+  }
+
+  .chat-messages {
+    padding: 8px; /* Reduced padding on small mobile for more space */
   }
 }

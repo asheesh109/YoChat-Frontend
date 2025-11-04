@@ -29,13 +29,19 @@ body.register-page {
   min-height: 100vh;
 }
 
-#root.register-page,
-body.register-page #root,
-body.register-page html {
+html,
+body.register-page {
   height: auto !important;
-  overflow-y: auto !important;
-  overflow: visible !important;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
+
+.register-modal {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 
 /* Landing Container - Full scrollable with explicit height management */
 .landing-container {

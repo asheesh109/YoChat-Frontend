@@ -34,6 +34,13 @@ html, body, #root {
   color: var(--text-primary);
 }
 
+/* Mobile specific overrides for dynamic viewport */
+@media (max-width: 768px) {
+  html, body, #root {
+    height: 100dvh !important;
+  }
+}
+
 /* App Container - WhatsApp desktop layout */
 .app-container {
   display: flex;
@@ -42,6 +49,12 @@ html, body, #root {
   background: var(--bg-primary);
   position: relative;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    height: 100dvh;
+  }
 }
 
 /* Loading and Error - Full center, WhatsApp style */
@@ -98,6 +111,12 @@ html, body, #root {
   z-index: 10;
   overflow: hidden;
   transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    height: 100dvh;
+  }
 }
 
 .sidebar-header {
@@ -334,6 +353,13 @@ html, body, #root {
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .main-content {
+    height: 100dvh;
+    overflow-y: auto;
+  }
+}
+
 /* Welcome Screen - Dark text on cream bg like WhatsApp */
 .welcome-screen {
   flex: 1;
@@ -404,12 +430,21 @@ html, body, #root {
   z-index: 1000;
 }
 
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 20px;
+  }
+}
+
 .modal-content {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 16px;
   width: 90%;
   max-width: 400px;
+  max-height: 90dvh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
@@ -551,7 +586,7 @@ html, body, #root {
     position: fixed;
     left: 0;
     top: 0;
-    height: 100vh;
+    height: 100dvh;
     z-index: 100;
     transform: translateX(-100%);
   }
@@ -563,6 +598,8 @@ html, body, #root {
   .main-content {
     width: 100%;
     padding-left: 0; /* Reset, hamburger is fixed */
+    height: 100dvh;
+    overflow-y: auto;
   }
 
   /* Hamburger - Fixed, no overlap */
@@ -582,11 +619,15 @@ html, body, #root {
     left: auto;
     z-index: 1001;
     background: rgba(0, 0, 0, 0.5);
-    padding-bottom: 20px;
   }
 
   .hamburger:hover {
     background: var(--bg-tertiary);
+  }
+
+  .modal-content {
+    max-height: 90dvh;
+    overflow-y: auto;
   }
 }
 

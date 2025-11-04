@@ -1,4 +1,4 @@
-// src/Components/ChatBox.js - Minor updates for text visibility on light bg
+// src/Components/ChatBox.js - Updated for mobile viewport height fix
 import React, { useEffect, useState, useRef } from "react";
 import socket from "../Utils/Socket";
 import axiosInstance from "../Utils/axiosInstance";
@@ -13,6 +13,18 @@ const ChatBox = ({ roomId, roomName: propRoomName }) => {
   const usernameRef = useRef("Anonymous");
   const isMountedRef = useRef(false);
   const chatBoxRef = useRef(null);
+
+  // Fix for mobile viewport height (address bar issues)
+  useEffect(() => {
+    const setVh = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    };
+
+    setVh();
+    window.addEventListener('resize', setVh);
+
+    return () => window.removeEventListener('resize', setVh);
+  }, []);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -157,7 +169,6 @@ const ChatBox = ({ roomId, roomName: propRoomName }) => {
             <span className="channel-icon">#</span>
             <h2 className="channel-name">{roomName}</h2>
           </div>
-          
         </div>
       </div>
       <div ref={chatBoxRef} className="chat-messages">
@@ -214,6 +225,7 @@ const ChatBox = ({ roomId, roomName: propRoomName }) => {
             onKeyPress={handleKeyPress}
             className="message-input"
             rows="1"
+            style={{ color: 'white' }}
           />
           <button
             onClick={handleSend}

@@ -23,6 +23,15 @@ const Register = () => {
     };
   }, []);
 
+  // Prevent scrolling when register form is shown
+  useEffect(() => {
+    if (showRegisterForm) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+  }, [showRegisterForm]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (error) setError('');
